@@ -1,0 +1,15 @@
+spring:
+  thymeleaf:
+    mode: HTML
+
+  profiles:
+    active: dev
+
+  servlet:
+    multipart:
+      max-request-size: 30MB
+      max-file-size: 20MB
+
+comment.avatar: /images/avatar.jpeg
+
+qiniu_url: http://q4lhaoa7s.bkt.clouddn.com/

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>文件上传</title>
+</head>
+<body>
+
+
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu(5)"></nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+
+        <div class="ui inverted segment">
+
+            <form class="ui inverted form" method="post" id="formPost">
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>歌名</label>
+                        <input name="name" id="music_name" placeholder="请输入歌名!" type="text">
+                    </div>
+
+                    <div class="field">
+                        歌曲上传框<br>
+                        <input type="file" id="file1"><br>
+                    </div>
+
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>艺术家</label>
+                        <input name="artist" id="music_artist" placeholder="请输入艺术家!" type="text">
+                    </div>
+
+                    <div class="field">
+                        歌词上传框<br>
+                        <input type="file" id="file2"><br>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>封面链接</label>
+                        <input name="cover" placeholder="请输入封面链接!" type="text">
+                    </div>
+                    <div class="field">
+                        <label>歌词链接</label>
+                        <input name="lrc" id="lrc_url" placeholder="请输入歌词链接!" type="text">
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>歌曲链接</label>
+                        <input name="url" id="music_url" placeholder="请输入歌曲链接!" type="text">
+                    </div>
+                    <div class="field" align="center">
+                        <label>提交信息</label>
+                        <input type="submit" class="ui button"/>
+                    </div>
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="admin/_fragments :: footer"></footer>
+<th:block th:replace="admin/_fragments :: script"></th:block>
+<script>
+    //首先监听input框的变动，选中一个新的文件会触发change事件
+    document.querySelector("#file1").addEventListener("change", function () {
+        //获取到选中的文件
+        let file = document.querySelector("#file1").files[0];
+        //创建formdata对象
+        let formdata = new FormData();
+        formdata.append("music-file", file);//文件上传的名字  和 后台统一
+        //创建xhr，使用ajax进行文件上传
+        let xhr = new XMLHttpRequest();
+        xhr.open("post", "/file/uploadMusic");
+        //回调
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+                let parseJSON = $.parseJSON(xhr.responseText);
+                $("#music_url").val(parseJSON.url);
+
+                let name = parseJSON.name;
+                var str = name.split(" - ");
+                $("#music_name").val(str[1]);
+                $("#music_artist").val(str[0]);
+            }
+        };
+        //将formdata上传
+        xhr.send(formdata);
+    });
+
+    //首先监听input框的变动，选中一个新的文件会触发change事件
+    document.querySelector("#file2").addEventListener("change", function () {
+        //获取到选中的文件
+        let file = document.querySelector("#file2").files[0];
+        //创建formdata对象
+        let formdata = new FormData();
+        formdata.append("lrc-file", file);//文件上传的名字  和 后台统一
+        //创建xhr，使用ajax进行文件上传
+        let xhr = new XMLHttpRequest();
+        xhr.open("post", "/file/uploadLrc");
+        //回调
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+                let parseJSON = $.parseJSON(xhr.responseText);
+                $("#lrc_url").val(parseJSON.url);
+            }
+        };
+        //将formdata上传
+        xhr.send(formdata);
+    });
+
+    $("#formPost").submit(function () {
+        $.ajax({
+            type: "POST",
+            url: "/admin/saveMusic",
+            data: $("#formPost").serialize(),
+            success: function (msg) {
+                if (msg.flag) {
+                    location.href = "/admin/uploadfiles"
+                } else {
+                    alert(msg.message);
+                }
+            }
+        });
+        return false;
+    });
+</script>
+</body>
+</html>

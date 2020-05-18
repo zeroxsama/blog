@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+    <title>关于我</title>
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="_fragments :: menu(5)"></nav>
+
+<!--中间内容-->
+<div  class="m-container m-padded-tb-big animated bounce">
+    <div class="ui container">
+
+        <div class="ui stackable grid">
+            <div class="eleven wide column">
+                <div class="ui segment">
+                    <img src="https://i.picsum.photos/id/155/800/600.jpg" alt="" class="ui rounded image">
+                </div>
+            </div>
+            <div class="five wide column">
+                <div class="ui top attached segment">
+                    <div class="ui header">关于我</div>
+                </div>
+                <div class="ui attached segment">
+                    <p class="m-text">时间不在于你拥有多少，而在于你怎么样使用.</p>
+                </div>
+                <div class="ui attached segment">
+                    <div class="ui orange basic left pointing label">编程</div>
+                    <div class="ui orange basic left pointing label">写作</div>
+                    <div class="ui orange basic left pointing label">思考</div>
+                    <div class="ui orange basic left pointing label">运动</div>
+                </div>
+                <div class="ui attached segment">
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">Java</div>
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">JavaScript</div>
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">Node</div>
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">React</div>
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">RN</div>
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">MYSQL</div>
+                    <div class="ui teal basic left pointing label m-margin-tb-tiny">...</div>
+                </div>
+                <div class="ui bottom attached segment">
+                    <a href="https://github.com/zeroxsama" class="ui circular icon button"><i class="github icon"></i></a>
+                    <a href="https://u.wechat.com/EH6richJIBJXXNa2GJ5VWHA" class="ui wechat circular icon button"><i class="weixin icon"></i></a>
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin=1137042957&site=qq&menu=yes" class="ui qq circular icon button" data-content="1137042957" data-position="bottom center"><i class="qq icon"></i></a>
+                </div>
+
+                <div class="ui qq-qr flowing popup transition hidden">
+                    <img src="/images/qq.jpg" alt="" class="ui rounded image" style="width: 110px">
+                </div>
+
+                <div class="ui wechat-qr flowing popup transition hidden">
+                    <img src="/images/wechat.jpg" alt="" class="ui rounded image" style="width: 110px">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="_fragments :: footer" ></footer>
+<th:block th:replace="_fragments :: script"></th:block>
+
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.wechat').popup({
+        popup: $('.wechat-qr'),
+        position: 'bottom center'
+    });
+
+    $('.qq').popup({
+        popup: $('.qq-qr'),
+        position: 'bottom center'
+    });
+
+</script>
+</body>
+</html>

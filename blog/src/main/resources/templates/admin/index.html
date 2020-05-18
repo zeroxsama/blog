@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>博客管理</title>
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu(0)"></nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div align="center" class="ui success large  message">
+            <h3>
+                <span th:text="${session.user.nickname}"></span>,欢迎登录!
+            </h3>
+        </div>
+        <img th:src="@{${session.user.avatar}}" alt="" class="ui rounded bordered fluid image">
+    </div>
+</div>
+
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="admin/_fragments :: footer"></footer>
+<th:block th:replace="admin/_fragments :: script"></th:block>
+</body>
+</html>

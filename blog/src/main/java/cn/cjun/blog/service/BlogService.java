@@ -160,4 +160,12 @@ public class BlogService {
             }
         }, pageable);
     }
+
+    public void operateBlog(List<Long> ids, boolean bool) {
+        for (Long id : ids) {
+            Blog blog = blogDao.findById(id).get();
+            blog.setPublished(bool);
+            blog.setUpdateTime(new Date());
+        }
+    }
 }

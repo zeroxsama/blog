@@ -1,5 +1,6 @@
 package cn.cjun.blog.controller.admin;
 
+import cn.cjun.blog.entity.Page;
 import cn.cjun.blog.entity.Result;
 import cn.cjun.blog.pojo.Type;
 import cn.cjun.blog.service.TypeService;
@@ -25,8 +26,19 @@ public class TypeController {
     @GetMapping("types")
     public String types(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
                                 Pageable pageable, Model model) {
-        model.addAttribute("page", typeService.listType(pageable));
+        org.springframework.data.domain.Page<Type> types = typeService.listType(pageable);
+        model.addAttribute("page", types);
+        page(pageable, model, types);
         return "admin/types";
+    }
+
+    private void page(Pageable pageable, Model model, org.springframework.data.domain.Page<Type> types) {
+        //封装分页对象
+        Page<Type> page = new Page<>(types.getTotalElements(),
+                pageable.getPageNumber() + 1,
+                Page.pageSize, 3);
+
+        model.addAttribute("pageB", page);
     }
 
     @PostMapping("types")
@@ -51,14 +63,14 @@ public class TypeController {
     }
 
     @GetMapping("types/input")
-    public String input( Model model) {
-        model.addAttribute("type",new Type());
+    public String input(Model model) {
+        model.addAttribute("type", new Type());
         return "admin/types-input";
     }
 
     @GetMapping("types/{id}")
     public String input(@PathVariable Long id, Model model) {
-        model.addAttribute("type",typeService.getType(id));
+        model.addAttribute("type", typeService.getType(id));
         return "admin/types-input";
     }
 }

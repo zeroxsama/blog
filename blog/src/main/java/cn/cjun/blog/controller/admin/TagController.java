@@ -1,5 +1,6 @@
 package cn.cjun.blog.controller.admin;
 
+import cn.cjun.blog.entity.Page;
 import cn.cjun.blog.entity.Result;
 import cn.cjun.blog.pojo.Tag;
 import cn.cjun.blog.service.TagService;
@@ -24,9 +25,20 @@ public class TagController {
 
     @GetMapping("tags")
     public String tags(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC)
-                                Pageable pageable, Model model) {
-        model.addAttribute("page", tagService.listTag(pageable));
+                               Pageable pageable, Model model) {
+        org.springframework.data.domain.Page<Tag> tags = tagService.listTag(pageable);
+        page(pageable, model, tags);
+        model.addAttribute("page", tags);
         return "admin/tags";
+    }
+
+    private void page(Pageable pageable, Model model, org.springframework.data.domain.Page<Tag> tags) {
+        //封装分页对象
+        Page<Tag> page = new Page<>(tags.getTotalElements(),
+                pageable.getPageNumber() + 1,
+                Page.pageSize, 3);
+
+        model.addAttribute("pageB", page);
     }
 
     @PostMapping("tags")
@@ -51,8 +63,8 @@ public class TagController {
     }
 
     @GetMapping("tags/input")
-    public String input( Model model) {
-        model.addAttribute("tag",new Tag());
+    public String input(Model model) {
+        model.addAttribute("tag", new Tag());
         return "admin/tags-input";
     }
 

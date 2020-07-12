@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="admin/_fragments :: head(~{::title})">
     <title>博客管理</title>
 </head>
@@ -22,7 +22,7 @@
     <div class="ui container">
 
 
-        <div class="ui basic modal">
+        <div class="ui basic modal" id="delete">
             <div class="ui icon header">
                 您是否想删除该文章?
             </div>
@@ -39,6 +39,27 @@
                 <div class="ui green ok inverted button">
                     <i class="checkmark icon"></i>
                     是的，我需要删除它
+                </div>
+            </div>
+        </div>
+
+        <div class="ui basic modal operate" id="operate">
+            <div class="ui icon header">
+                您是否想批量修改文章状态?
+            </div>
+            <div class="image content">
+                <div class="middle aligned image">
+                    <i class="question icon"></i>
+                </div>
+                <div class="description">
+                    <p>该操作不可恢复,请谨慎操作!!!</p>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui inverted red cancel button">不，谢谢</div>
+                <div class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>
+                    是的，我需要
                 </div>
             </div>
         </div>
@@ -82,7 +103,8 @@
             <table th:fragment="blogList" class="ui compact teal table">
                 <thead>
                 <tr>
-                    <th></th>
+                    <th><input id="selectAll" onclick="selectAll()" type="checkbox"></th>
+                    <th>序号</th>
                     <th>标题</th>
                     <th>类型</th>
                     <th>推荐</th>
@@ -93,6 +115,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="blog,iterStat : ${page.content}">
+                    <td><input onclick="radio(this)" name="select" type="checkbox" th:value="${blog.id}"></td>
                     <td th:text="${iterStat.count}">1</td>
                     <td th:text="${blog.title}">刻意练习清单</td>
                     <td th:text="${blog.type.name}">认知升级</td>
@@ -109,26 +132,27 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th colspan="7">
-<!--                        <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
-                            <a onclick="page(this)" th:attr="data-page=${page.number}-1" class="item"
-                               th:unless="${page.first}">上一页</a>
+                    <th colspan="10">
+                        <!--                        <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
+                                                    <a onclick="page(this)" th:attr="data-page=${page.number}-1" class="item"
+                                                       th:unless="${page.first}">上一页</a>
 
-                            <a th:class="${i}==${pageB.currentpage}?'active item':'item'"
-                               th:each="i:${#numbers.sequence(pageB.lpage,pageB.rpage)}"
-                               th:attr="data-page=${i}-1" onclick="page(this)" th:text="${i}">
-                            </a>
+                                                    <a th:class="${i}==${pageB.currentpage}?'active item':'item'"
+                                                       th:each="i:${#numbers.sequence(pageB.lpage,pageB.rpage)}"
+                                                       th:attr="data-page=${i}-1" onclick="page(this)" th:text="${i}">
+                                                    </a>
 
-                            <a onclick="page(this)" th:attr="data-page=${page.number}+1" class=" item"
-                               th:unless="${page.last}">下一页</a>
-                        </div>-->
+                                                    <a onclick="page(this)" th:attr="data-page=${page.number}+1" class=" item"
+                                                       th:unless="${page.last}">下一页</a>
+                                                </div>-->
                         <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
 
                             <div class="ui right floated pagination menu inverted">
                                 <a onclick="page(0)" th:unless="${page.first}"
                                    class="item">首页</a>
 
-                                <a class="icon item" onclick="page(this)" th:attr="data-page=${pageB.upper}-1" th:unless="${page.first}">
+                                <a class="icon item" onclick="page(this)" th:attr="data-page=${pageB.upper}-1"
+                                   th:unless="${page.first}">
                                     <i class="left chevron icon"></i>
                                 </a>
 
@@ -137,10 +161,11 @@
                                    th:attr="data-page=${i}-1" onclick="page(this)" th:text="${i}">
                                 </a>
 
-                                <a class="icon item" onclick="page(this)" th:attr="data-page=${pageB.next}-1" th:unless="${page.last}">
+                                <a class="icon item" onclick="page(this)" th:attr="data-page=${pageB.next}-1"
+                                   th:unless="${page.last}">
                                     <i class="right chevron icon"></i>
                                 </a>
-                                <a onclick="page(this)" th:attr="data-page=${pageB.last}-1"  th:unless="${page.last}"
+                                <a onclick="page(this)" th:attr="data-page=${pageB.last}-1" th:unless="${page.last}"
                                    class="item">末页
                                 </a>
                             </div>
@@ -149,6 +174,11 @@
 
                         <a th:href="@{/admin/blogs/input}"
                            class="ui right floated teal basic button">新增</a>
+
+                        <button id="issue" onclick="issue()" class="ui right floated teal basic button">批量发布</button>
+
+                        <button id="draft" onclick="draft()" class="ui right floated teal basic button">批量草稿</button>
+
                     </th>
                 </tr>
                 </tfoot>
@@ -167,6 +197,96 @@
 <th:block th:replace="admin/_fragments :: script"></th:block>
 
 <script>
+    let ids = new Set();
+
+    //全选,反选
+    function selectAll() {
+        //反选
+        $("input[name='select']").each(function () {
+            if ($(this).prop("checked")) {
+                $(this).prop("checked", false);
+                ids.delete($(this).val());
+            } else {
+                $(this).prop("checked", true);
+                ids.add($(this).val());
+            }
+        });
+        //全选
+        // if($("#selectAll").prop("checked")) {
+        //     $("input[name='select']").each(function () {
+        //         ids.add($(this).val());
+        //     });
+        // }else {
+        //     $("input[name='select']").each(function () {
+        //         ids.delete($(this).val());
+        //     });
+        // }
+        // $("input[name='select']").prop("checked", $("#selectAll").prop("checked"));
+        console.log(ids);
+    }
+
+    //单选
+    function radio(obj) {
+        if ($(obj).prop("checked")) {
+            ids.add($(obj).val());
+        } else {
+            ids.delete($(obj).val());
+        }
+    }
+
+    //批量发布
+    function issue() {
+        $('#operate')
+            .modal({
+                closable: false,
+                onDeny: function () {
+                },
+                onApprove: function () {
+                    $.ajax({
+                        type: "PUT",
+                        url: "/admin/blogs/issue",
+                        dataType: "json",
+                        data: JSON.stringify(Array.from(ids)),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (msg) {
+                            if (msg.flag) {
+                                location.href = "/admin/blogs"
+                            } else {
+                                alert(msg.message);
+                            }
+                        }
+                    });
+                }
+            })
+            .modal('show');
+    }
+
+    //批量草稿
+    function draft() {
+        $('#operate')
+            .modal({
+                closable: false,
+                onDeny: function () {
+                },
+                onApprove: function () {
+                    $.ajax({
+                        type: "PUT",
+                        url: "/admin/blogs/draft",
+                        dataType: "json",
+                        data: JSON.stringify(Array.from(ids)),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (msg) {
+                            if (msg.flag) {
+                                location.href = "/admin/blogs"
+                            } else {
+                                alert(msg.message);
+                            }
+                        }
+                    });
+                }
+            })
+            .modal('show')
+    }
 
     $('#clear-btn')
         .on('click', function () {
@@ -192,16 +312,22 @@
             typeId: $("[name='typeId']").val(),
             recommend: $("[name='recommend']").prop('checked'),
             page: $("[name='page']").val()
+        }, function () {
+            $("input[name='select']").each(function () {
+                if (ids.has($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
         });
     }
 
     function ddd(id) {
-        $('.ui.basic.modal')
+        $('#delete')
             .modal({
-                closable  : false,
-                onDeny    : function(){
+                closable: false,
+                onDeny: function () {
                 },
-                onApprove : function() {
+                onApprove: function () {
                     $.ajax({
                         type: "DELETE",
                         url: "/admin/blogs/" + id,

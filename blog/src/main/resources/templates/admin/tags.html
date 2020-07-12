@@ -52,7 +52,7 @@
                 <div class="middle aligned image">
                     <i class="frown icon"></i>
                 </div>
-                <div class="description" >
+                <div class="description">
                     <p id="eee"></p>
                 </div>
             </div>
@@ -67,7 +67,7 @@
         <table class="ui celled table green">
             <thead>
             <tr>
-                <th></th>
+                <th>序号</th>
                 <th>名称</th>
                 <th>操作</th>
             </tr>
@@ -86,10 +86,32 @@
             <tr>
                 <th colspan="6">
                     <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
-                        <a th:href="@{/admin/types(page=${page.number}-1)}" class="item"
-                           th:unless="${page.first}">上一页</a>
-                        <a th:href="@{/admin/types(page=${page.number}+1)}" class="item"
-                           th:unless="${page.last}">下一页</a>
+
+                        <div class="ui bottom floated attached segment" th:if="${page.totalPages}>1">
+
+                            <div class="ui right floated pagination menu inverted">
+                                <a href="#" th:href="@{/admin/tags/(page=0)}" th:unless="${page.first}"
+                                   class="item">首页</a>
+
+                                <a class="icon item" th:href="@{/admin/tags/(page=${pageB.upper}-1)}" th:unless="${page.first}">
+                                    <i class="left chevron icon"></i>
+                                </a>
+
+                                <a th:class="${i}==${pageB.currentpage}?'active item':'item'"
+                                   th:each="i:${#numbers.sequence(pageB.lpage,pageB.rpage)}"
+                                   th:href="@{/admin/tags/(page=${i}-1)}" th:text="${i}">
+                                </a>
+
+                                <a class="icon item" th:href="@{/admin/tags/(page=${pageB.next}-1)}" th:unless="${page.last}">
+                                    <i class="right chevron icon"></i>
+                                </a>
+                                <a href="#" th:href="@{/admin/tags/(page=${pageB.last}-1)}" th:unless="${page.last}"
+                                   class="item">末页
+                                </a>
+                            </div>
+
+                        </div>
+
                     </div>
                     <a href="#" th:href="@{/admin/tags/input}" class="ui mini right floated teal basic button">新增</a>
                 </th>

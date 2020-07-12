@@ -1,2 +1,13 @@
 # Project exclude paths
-/blog/target/
+# Maven #
+blog/target/
+
+# IDEA #
+blog/.idea/
+blog/*.iml
+blog/logs/
+
+# Eclipse #
+blog/.settings/
+blog/.classpath
+blog/.project

@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @Author 戴智钧
@@ -75,7 +76,7 @@ public class BlogController {
 
     @PostMapping("blogs")
     public String saveBlog(Blog blog, HttpSession session) {
-        System.out.println(blog);
+
         blog.setUser((User) session.getAttribute("user"));
         blog.setTags(tagService.listTag(blog.getTagIds()));
 
@@ -124,4 +125,17 @@ public class BlogController {
         return new Result(true, "操作成功");
     }
 
+    @PutMapping("blogs/issue")
+    @ResponseBody
+    public Result issueBlog(@RequestBody List<Long> ids) {
+        blogService.operateBlog(ids, true);
+        return new Result(true, "操作成功");
+    }
+
+    @PutMapping("blogs/draft")
+    @ResponseBody
+    public Result draftBlog(@RequestBody List<Long> ids) {
+        blogService.operateBlog(ids, false);
+        return new Result(true, "操作成功");
+    }
 }

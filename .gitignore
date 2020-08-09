@@ -3,9 +3,9 @@
 blog/target/
 
 # IDEA #
-blog/.idea/
-blog/*.iml
-blog/logs/
+.idea/
+*.iml
+log/
 
 # Eclipse #
 blog/.settings/

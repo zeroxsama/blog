@@ -8,6 +8,6 @@ blog/target/
 log/
 
 # Eclipse #
-blog/.settings/
-blog/.classpath
-blog/.project
+.settings/
+.classpath
+.project

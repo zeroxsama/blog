@@ -98,9 +98,37 @@
     <li></li>
     <li></li>
 </ul>
-<th:block th:replace="admin/_fragments :: script"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-rc.1/jsencrypt.min.js"></script>
 
 <script>
+
+    function form2JsonString(formId) {
+        var paramArray = $('#' + formId).serializeArray();
+        var jsonObj = {};
+        $(paramArray).each(function () {
+            jsonObj[this.name] = this.value;
+            if (this.name === "tagIds") {
+                jsonObj[this.name] = ($("#tagIds").val()).split(",");
+            }
+        });
+        return JSON.stringify(jsonObj);
+    }
+
+    function encryptPassword(t) {
+        let s = !1;
+        return $.ajax({
+            url: "/admin/login?act=getkey&r=" + Math.random(),
+            async: !1
+        }).done(function (e) {
+            var a = new JSEncrypt;
+            a.setPublicKey(e.data);
+            var n = a.encrypt(t);
+            t = n;
+            s = !0
+        }), s ? t : "";
+    }
 
     $("#formdata").submit(function () {
         let encrypted = encryptPassword(form2JsonString("formdata"));

@@ -27,25 +27,22 @@ public class CommentController {
     @Autowired
     private BlogService blogService;
 
-    @Value("${comment.avatar}")
-    private String avatar;
-
     @GetMapping("comments/{id}")
     public String comments(@PathVariable Long id, Model model) {
         model.addAttribute("comments", commentService.listCommentByBlogId(id));
         return "blog :: commentList";
     }
 
-
     @PostMapping("comments")
     public String comments(Comment comment, HttpSession session) {
         User user = (User) session.getAttribute("user");
+
         if (user != null) {
             //管理员登录 取头像 标记是管理员
             comment.setAvatar(user.getAvatar());
+            comment.setNickname(user.getNickname());
+            comment.setEmail(user.getEmail());
             comment.setAdminComment(true);
-        }else {
-            comment.setAvatar(avatar);//设置头像
         }
 
         Long blogId = comment.getBlog().getId();

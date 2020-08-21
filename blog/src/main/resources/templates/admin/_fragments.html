@@ -81,11 +81,12 @@
 <th:block th:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-rc.1/jsencrypt.min.js"></script>
     <script src="/lib/editormd/editormd.min.js"></script>
 
     <script>
         $('#newblog-container').load(/*[[@{/footer/newblogs}]]*/"/footer/newblogs");
+        let bgUrls = ['moroccan-flower-dark.png', 'moroccan-flower.png', 'watercolor.png', 'more-leaves-on-green.png', 'more-leaves.png', 'double-bubble-dark.png', 'double-bubble.png', 'double-bubble-outline.png', 'bush.png', 'oriental-tiles.png', 'y-so-serious-white.png', 'y-so-serious.png', 'webb-dark.png', 'webb.png', 'geometric-leaves.png', 'pixel-heart.png', 'repeated-square-dark.png', 'repeated-square.png', 'canadian-dollar.png', 'spikes.png', 'vintage-wallpaper.png', 'let-there-be-sun.png', 'checkerboard-cross.png', '5-dots.png', 'blue-snow.png', 'embossed-diamond.png', 'chevron.png', 'criss-cross.png', 'greek-vase.png', 'herringbone.png', 'triangle-mosaic.png', 'circle-blues.png', 'dot-grid.png', 'so-white.png', 'cork-board.png', 'hotel-wallpaper-black.png', 'hotel-wallpaper.png', 'trees.png', 'ripples.png', 'beanstalk.png', 'beanstalk-dark.png', 'email-pattern.png', 'papyrus-dark.png', 'papyrus.png', 'fishnets-and-hearts.png', 'lilypads.png', 'floor-tile.png', 'beige-tiles.png', 'memphis-mini-dark.png', 'memphis-mini.png', 'united-squares-negative.png', 'united-squares.png', 'interlaced.png', 'dynamic-style.png', 'dark-honeycomb.png', 'mosaic.png', 'crossline-lines.png', 'crossline-dots.png', 'positive.png', 'white-waves.png', 'prism.png', 'dark-paths.png', 'fancy-cushion.png', 'morocco-blue.png', 'morocco.png', 'circuit.png', 'diagonal-squares.png', 'houndstooth-pattern.png', 'pipes.png', 'folk-pattern-black.png', 'folk-pattern.png', 'wheat.png', 'just-waves.png', 'tiny-squares.png', 'leaves.png', 'gravel.png', 'wavy-dots.png', 'bananas.png', 'oriental.png', 'full-bloom.png', 'connectwork.png', 'qbkls.png', 'leaves-pattern.png', 'country-quilt-dark.png', 'country-quilt.png', 'stripes-light.png', 'what-the-hex-dark.png', 'what-the-hex.png', 'spring.png', 'light-grey-terrazzo.png', 'dark-grey-terrazzo.png', 'palm-leaf.png', 'sun-pattern.png', 'tic-tac-toe.png', 'funky-lines.png', 'christmas-black.png', 'christmas-colour.png', 'light-veneer.png', 'polka-dots.png', 'circles-light.png', 'circles-dark.png', 'halftone-yellow.png', 'dust_scratches.png', 'spiration-dark.png', 'spiration-light.png', 'stonehaven.png', 'curls.png', 'intersection.png', 'round.png', 'regal.png', 'hypnotize.png', 'vintage-concrete.png', 'darkness.png', 'doodles.png', 'wormz.png', 'skyscraper.png', 'memphis-colorful.png', 'gaming-pattern.png', 'organic-tiles.png', 'vertical-waves.png', 'dark-triangles.png', 'concrete-texture.png', 'vintage-leaves.png', 'whirlpool.png', 'cloudy-day.png', 'hip-square.png', 'zig zag wool.png', 'cloth.png', 'pow-star.png', 'playstation-pattern.png', 'pink dust.png', 'circles-and-roundabouts.png', 'ep_naturalblack.png', 'topography.png', 'sakura.png', 'sports.png', 'ep_naturalwhite.png', 'seigaiha.png', 'cork-wallet.png', 'asanoha-400px.png', 'sayagata-400px.png', 'weather.png', 'new_year_background.png', 'wov.png', 'ignasi_pattern_s.png', 'cheap_diagonal_fabric.png', 'pink_rice.png', 'paisley.png', 'confectionary.png', 'concrete_seamless.png', 'dark_embroidery.png', 'symphony.png', 'contemporary_china_2.png', 'contemporary_china.png', 'eight_horns.png', 'upfeathers.png', 'swirl_pattern.png', 'subtle_white_mini_waves.png', 'logo_x_pattern.png', 'footer_lodyas.png', 'restaurant.png', 'school.png', 'seamless_paper_texture.png', 'small_steps.png', 'restaurant_icons.png', 'halftone.png', 'geometry2.png', 'congruent_outline.png', 'congruent_pentagon.png', 'sativa.png', 'photography.png', 'giftly.png', 'skulls.png', 'crossword.png', 'food.png', 'green_cup.png', 'stardust.png', 'squared_metal.png', 'old_map.png', 'light_grey.png', 'old_moon.png', 'zwartevilt.png', 'fresh_snow.png', 'nice_snow.png', 'wet_snow.png', 'ricepaper_v3.png', 'sprinkles.png', 'brushed.png', 'tree_bark.png', 'wild_flowers.png', 'sos.png', 'notebook.png', 'sandpaper.png', 'geometry.png', 'dimension.png', 'greyzz.png', 'triangular.png', 'pixel_weave.png', 'hoffman.png', 'tweed.png', 'witewall_3.png', 'brickwall.png', 'cream_pixels.png', 'pw_pattern.png', 'ticks.png', 'mooning.png', 'squairy_light.png', 'binding_light.png', 'binding_dark.png', 'ps_neutral.png', 'wavegrid.png', 'textured_paper.png', 'grey_wash_wall.png', 'p6.png', 'p5.png', 'p4.png', 'p1.png', 'p2.png', 'white_wall_hash.png', 'subtle_white_feathers.png', 'sneaker_mesh_fabric.png', 'mochaGrunge.png', 'knitting250px.png', 'fabric_of_squares_gray.png', 'cloth_alike.png', 'agsquare.png', 'slash_it.png', 'simple_dashed.png', 'moulin.png', 'dark_exa.png', 'dark_dotted2.png', 'escheresque_ste.png', 'black_lozenge.png', 'kindajean.png', 'paper_fibers.png', 'dark_fish_skin.png', 'pw_maze_white.png', 'pw_maze_black.png', 'satinweave.png', 'ecailles.png', 'subtle_grunge.png', 'honey_im_subtle.png', 'gray_jean.png', 'linedpaper.png', 'blackorchid.png', 'white_wall2.png', 'diagonales_decalees.png', 'creampaper.png', 'debut_dark.png', 'debut_light.png', 'twinkle_twinkle.png', 'nasty_fabric.png', 'diagonal_waves.png', 'otis_redding.png', 'billie_holiday.png', 'az_subtle.png', 'wild_oliva.png', 'stressed_linen.png', 'navy_blue.png', 'shl.png', 'cream_dust.png', 'bedge_grunge.png', 'noisy_net.png', 'grid.png', 'straws.png', 'cardboard_flat.png', 'noisy_grid.png', 'office.png', 'grey.png', 'hexabump.png', 'shattered.png', 'subtle_carbon.png', 'swirl.png', 'back_pattern.png', 'striped_lens.png', 'skelatal_weave.png', 'black_twill.png', 'asfalt.png', 'subtle_surface.png', 'retina_wood.png', 'subtle_dots.png', 'dust.png', 'use_your_illusion.png', 'retina_dust.png', 'light_noise_diagonal.png', 'noise_lines.png', 'pyramid.png', 'retro_intro.png', 'tiny_grid.png', 'textured_stripes.png', 'strange_bullseyes.png', 'low_contrast_linen.png']
+        $("body").css("background-image", "url('https://www.toptal.com/designers/subtlepatterns/patterns/" + bgUrls[Math.floor(Math.random() * bgUrls.length)] + "')");
     </script>
     <script>
         $('.menu.toggle').click(function () {
@@ -95,32 +96,6 @@
         $('.ui.dropdown').dropdown({
             on: 'hover'
         });
-
-        function form2JsonString(formId) {
-            var paramArray = $('#' + formId).serializeArray();
-            var jsonObj = {};
-            $(paramArray).each(function () {
-                jsonObj[this.name] = this.value;
-                if(this.name === "tagIds"){
-                    jsonObj[this.name] = ($("#tagIds").val()).split(",");
-                }
-            });
-            return JSON.stringify(jsonObj);
-        }
-
-        function encryptPassword(t) {
-            let s = !1;
-            return $.ajax({
-                url: "/admin/login?act=getkey&r=" + Math.random(),
-                async: !1
-            }).done(function (e) {
-                var a = new JSEncrypt;
-                a.setPublicKey(e.data);
-                var n = a.encrypt(t);
-                t = n;
-                s = !0
-            }), s ? t : "";
-        }
 
     </script>
 </th:block>

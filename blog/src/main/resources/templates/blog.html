@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="_fragments :: head(~{::title})">
     <title>博客详情</title>
 </head>
@@ -34,8 +34,7 @@
         </div>
         <div class="ui attached segment">
             <!--图片区域-->
-            <img src="https://unsplash.it/800/450?image=1005" th:src="@{${blog.firstPicture}}" alt=""
-                 class="ui fluid rounded image">
+            <img th:src="@{${blog.firstPicture}}" alt="" class="ui fluid rounded image">
         </div>
 
         <div class="ui  attached padded segment">
@@ -46,7 +45,6 @@
 
             <h2 class="ui center aligned header" th:text="${blog.title}">关于刻意练习的清单</h2>
             <br>
-
 
             <!--中间主要内容部分-->
             <div id="content" class="typo typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large">
@@ -114,7 +112,7 @@
                         <h3 class="ui dividing header">评论</h3>
                         <div class="comment" th:each="comment : ${comments}">
                             <a class="avatar">
-                                <img src="https://unsplash.it/100/100?image=1005" th:src="@{${comment.avatar}}">
+                                <img th:src="@{${comment.avatar}}">
                             </a>
                             <div class="content">
                                 <a class="author">
@@ -139,7 +137,7 @@
                             <div class="comments" th:if="${#arrays.length(comment.replyComments)}>0">
                                 <div class="comment" th:each="reply : ${comment.replyComments}">
                                     <a class="avatar">
-                                        <img src="https://unsplash.it/100/100?image=1005" th:src="@{${reply.avatar}}">
+                                        <img th:src="@{${reply.avatar}}">
                                     </a>
                                     <div class="content">
                                         <a class="author">
@@ -175,18 +173,26 @@
                     <textarea name="content" placeholder="请输入评论信息..."></textarea>
                 </div>
                 <div class="fields">
+                    <!--                    <div class="field m-mobile-wide m-margin-bottom-small">
+                                            <div class="ui left icon input">
+                                                <i class="user icon"></i>
+                                                <input type="text" name="nickname" placeholder="姓名"
+                                                       th:value="${session.user}!=null ? ${session.user.nickname} : ''">
+                                            </div>
+                                        </div>
+                                        <div class="field m-mobile-wide m-margin-bottom-small">
+                                            <div class="ui left icon input">
+                                                <i class="mail icon"></i>
+                                                <input autocomplete="off" type="text" name="email" placeholder="邮箱"
+                                                       th:value="${session.user}!=null ? ${session.user.email} : ''">
+                                            </div>
+                                        </div>-->
                     <div class="field m-mobile-wide m-margin-bottom-small">
                         <div class="ui left icon input">
-                            <i class="user icon"></i>
-                            <input type="text" name="nickname" placeholder="姓名"
-                                   th:value="${session.user}!=null ? ${session.user.nickname}">
-                        </div>
-                    </div>
-                    <div class="field m-mobile-wide m-margin-bottom-small">
-                        <div class="ui left icon input">
-                            <i class="mail icon"></i>
-                            <input autocomplete="off" type="text" name="email" placeholder="邮箱"
-                                   th:value="${session.user}!=null ? ${session.user.email}">
+                            <i class="qq icon"></i>
+                            <input autocomplete="off" maxlength="12" oninput="value=value.replace(/[^\d]/g,'')"
+                                   type="text" name="qq" placeholder="qq号"
+                                   th:value="${session.user} == null ? '1137042957' : ''">
                         </div>
                     </div>
                     <div class="field  m-margin-bottom-small m-mobile-wide">
@@ -194,6 +200,9 @@
                                 class="edit icon"></i>发布
                         </button>
                     </div>
+                </div>
+                <div class="ui error message">
+
                 </div>
             </div>
         </div>
@@ -347,26 +356,27 @@
     //评论表单验证
     $('.ui.form').form({
         fields: {
-            title: {
+            content: {
                 identifier: 'content',
                 rules: [{
                     type: 'empty',
-                    prompt: '请输入评论内容'
+                    prompt: '请输入评论信息...'
                 }
                 ]
             },
-            content: {
-                identifier: 'nickname',
+            /*            content: {
+                            identifier: 'nickname',
+                            rules: [{
+                                type: 'empty',
+                                prompt: '请输入你的大名'
+                            }]
+                        },*/
+            qq: {
+                identifier: 'qq',
                 rules: [{
-                    type: 'empty',
-                    prompt: '请输入你的大名'
-                }]
-            },
-            type: {
-                identifier: 'email',
-                rules: [{
-                    type: 'email',
-                    prompt: '请填写正确的邮箱地址'
+                    type: 'regExp',
+                    value: /^[1-9][0-9]{4,12}$/,
+                    prompt: '请输入正确的qq号'
                 }]
             }
         }
@@ -384,16 +394,31 @@
     });
 
     function postData() {
-        $("#comment-container").load(/*[[@{/comments}]]*/"", {
-            "parentComment.id": $("[name='parentComment.id']").val(),
-            "blog.id": $("[name='blog.id']").val(),
-            "nickname": $("[name='nickname']").val(),
-            "email": $("[name='email']").val(),
-            "content": $("[name='content']").val()
-        }, function (responseTxt, statusTxt, xhr) {
-            $(window).scrollTo($('#comment-container'), 500);
-            clearContent();
-        });
+        let qq = $("[name='qq']").val();
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: 'https://r.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins=' + qq,
+            dataType: "jsonp",
+            jsonpCallback: 'portraitCallBack',
+            scriptCharset: "gb2312",
+            success: function (data) {
+                let nickname = data[qq][6];
+                $("#comment-container").load(/*[[@{/comments}]]*/"", {
+                    "parentComment.id": $("[name='parentComment.id']").val(),
+                    "blog.id": $("[name='blog.id']").val(),
+                    "nickname": nickname,
+                    "email": qq + "@qq.com",
+                    "avatar": "http://q2.qlogo.cn/headimg_dl?dst_uin=" + qq + "&spec=100",
+                    "content": $("[name='content']").val()
+                }, function (responseTxt, statusTxt, xhr) {
+                    $(window).scrollTo($('#comment-container'), 500);
+                    clearContent();
+                });
+            }
+        })
+
+
     }
 
     function clearContent() {

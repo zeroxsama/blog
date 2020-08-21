@@ -8,7 +8,7 @@
 <!--导航-->
 <nav th:replace="_fragments :: menu(2)"></nav>
 
-<div  class="m-container-small m-padded-tb-big animated bounce">
+<div class="m-container-small m-padded-tb-big animated bounce">
     <div class="ui container">
         <!--header-->
         <div class="ui top attached segment">
@@ -17,33 +17,41 @@
                     <h3 class="ui teal header">分类</h3>
                 </div>
                 <div class="right aligned column">
-                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${#arrays.length(types)}"> 14 </h2> 个
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${#arrays.length(types)}">
+                    14 </h2> 个
                 </div>
             </div>
         </div>
 
         <div class="ui attached segment m-padded-tb-large">
             <div class="ui labeled button m-margin-tb-tiny" th:each="type : ${types}">
-                <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="ui basic  button" th:classappend="${type.id==activeTypeId} ? 'teal'" th:text="${type.name}">思考与感悟</a>
-                <div class="ui basic  left pointing label" th:classappend="${type.id==activeTypeId} ? 'teal'" th:text="${type.count}">24</div>
+                <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="ui basic  button"
+                   th:classappend="${type.id==activeTypeId} ? 'teal'" th:text="${type.name}">思考与感悟</a>
+                <div class="ui basic  left pointing label" th:classappend="${type.id==activeTypeId} ? 'teal'"
+                     th:text="${type.count}">24
+                </div>
             </div>
         </div>
 
         <div class="ui top attached teal segment">
-            <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
-                <div class="ui middle aligned mobile reversed stackable grid" >
+            <div class="ui padded vertical segment m-padded-tb-large" th:each="blog,start : ${page.content}">
+                <div class="ui middle aligned mobile reversed stackable grid">
                     <div class="eleven wide column">
-                        <h3 class="ui header" ><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black" th:text="${blog.title}">你真的理解什么是财富自由吗?</a></h3>
-                        <p class="m-text" th:text="|${blog.description}......|">正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来就没有想过，只是大家都那么做而已…...</p>
+                        <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank"
+                                                 class="m-black" th:text="${blog.title}">你真的理解什么是财富自由吗?</a></h3>
+                        <p class="m-text" th:text="|${blog.description}......|">
+                            正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来就没有想过，只是大家都那么做而已…...</p>
                         <div class="ui grid">
                             <div class="eleven wide column">
                                 <div class="ui mini horizontal link list">
                                     <div class="item">
-                                        <img src="https://unsplash.it/100/100?image=1005" th:src="@{${blog.user.avatar}}"  alt="" class="ui avatar image">
-                                        <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}" ></a></div>
+                                        <img th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
+                                        <div class="content"><a href="#" class="header"
+                                                                th:text="${blog.user.nickname}"></a></div>
                                     </div>
                                     <div class="item">
-                                        <i class="calendar icon"></i><span th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}">2017-10-01</span>
+                                        <i class="calendar icon"></i><span
+                                            th:text="${#dates.format(blog.createTime,'yyyy-MM-dd')}">2017-10-01</span>
                                     </div>
                                     <div class="item">
                                         <i class="eye icon"></i> <span th:text="${blog.views}">2342</span>
@@ -51,14 +59,22 @@
                                 </div>
                             </div>
                             <div class="right aligned five wide column">
-                                <a th:href="@{/types/{id}(id=${blog.type.id})}" target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}">认知升级</a>
+                                <a th:href="@{/types/{id}(id=${blog.type.id})}" target="_blank"
+                                   class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}">认知升级</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="five wide column">
                         <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
-                            <img src="https://unsplash.it/800/450?image=1005" th:src="@{${blog.firstPicture}}"  alt="" class="ui rounded image">
+                            <div th:if="${blog.firstPicture} == 'https://picsum.photos/800/300'">
+                                <img th:src="@{ {url}?random={index} (url=${blog.firstPicture},index=${start.index}) }"
+                                     alt="" class="ui rounded image">
+                            </div>
+                            <div th:unless="${blog.firstPicture} == 'https://picsum.photos/800/300'">
+                                <img th:src="@{${blog.firstPicture}}"
+                                     alt="" class="ui rounded image">
+                            </div>
                         </a>
                     </div>
 
@@ -67,16 +83,16 @@
         </div>
 
         <!--footer-->
-<!--        <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
-            <div class="ui middle aligned two column grid">
-                <div class="column">
-                    <a href="#" th:href="@{'/types/'+${activeTypeId}(page=${page.number}-1)}"  th:unless="${page.first}" class="ui mini teal basic button">上一页</a>
-                </div>
-                <div class="right aligned column">
-                    <a href="#" th:href="@{'/types/'+${activeTypeId}(page=${page.number}+1)}"  th:unless="${page.last}" class="ui mini teal basic button">下一页</a>
-                </div>
-            </div>
-        </div>-->
+        <!--        <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <a href="#" th:href="@{'/types/'+${activeTypeId}(page=${page.number}-1)}"  th:unless="${page.first}" class="ui mini teal basic button">上一页</a>
+                        </div>
+                        <div class="right aligned column">
+                            <a href="#" th:href="@{'/types/'+${activeTypeId}(page=${page.number}+1)}"  th:unless="${page.last}" class="ui mini teal basic button">下一页</a>
+                        </div>
+                    </div>
+                </div>-->
 
         <div class="ui bottom floated attached segment" th:if="${page.totalPages}>1">
 
@@ -84,7 +100,8 @@
                 <a href="#" th:href="@{'/types/'+${activeTypeId}(page=0)}" th:unless="${page.first}"
                    class="item">首页</a>
 
-                <a class="icon item" th:href="@{'/types/'+${activeTypeId}(page=${pageB.upper}-1)}" th:unless="${page.first}">
+                <a class="icon item" th:href="@{'/types/'+${activeTypeId}(page=${pageB.upper}-1)}"
+                   th:unless="${page.first}">
                     <i class="left chevron icon"></i>
                 </a>
 
@@ -93,7 +110,8 @@
                    th:href="@{'/types/'+${activeTypeId}(page=${i}-1)}" th:text="${i}">
                 </a>
 
-                <a class="icon item" th:href="@{'/types/'+${activeTypeId}(page=${pageB.next}-1)}" th:unless="${page.last}">
+                <a class="icon item" th:href="@{'/types/'+${activeTypeId}(page=${pageB.next}-1)}"
+                   th:unless="${page.last}">
                     <i class="right chevron icon"></i>
                 </a>
                 <a href="#" th:href="@{'/types/'+${activeTypeId}(page=${pageB.last}-1)}" th:unless="${page.last}"
@@ -109,7 +127,7 @@
 <br>
 <br>
 <!--底部footer-->
-<footer th:replace="_fragments :: footer" ></footer>
+<footer th:replace="_fragments :: footer"></footer>
 <th:block th:replace="_fragments :: script"></th:block>
 
 <script>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <title>更新七牛云</title>
+</head>
+<body>
+
+
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu(5)"></nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui inverted segment">
+            <form class="ui inverted form" method="put" id="form">
+                <div class="two fields">
+                    <div class="field">
+                        <label>修改前路径</label>
+                        <input name="beforeUrl" id="beforeUrl" placeholder="请输入修改前路径!" type="text">
+                    </div>
+
+                    <div class="field">
+                        <label>修改后路径</label>
+                        <input name="afterUrl" id="afterUrl" placeholder="请输入修改后路径!" type="text">
+                    </div>
+
+                </div>
+
+                <div class="field" align="center">
+                    <label>提交信息</label>
+                    <input type="submit" class="fluid ui button"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="admin/_fragments :: footer"></footer>
+<th:block th:replace="admin/_fragments :: script"></th:block>
+<script>
+    $("#form").submit(function () {
+
+        $.ajax({
+            type: "Put",
+            url: "/admin/qiniu",
+            data: form2JsonString("form"),
+            contentType: "application/json;charset-UTF-8",
+            success: function (msg) {
+                if (msg.flag) {
+                    location.href = "/admin/blogs"
+                } else {
+                    alert(msg.message);
+                }
+            }
+        });
+        return false;
+    });
+</script>
+</body>
+</html>

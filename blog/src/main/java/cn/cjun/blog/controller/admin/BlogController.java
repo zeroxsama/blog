@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author 戴智钧
@@ -39,6 +40,11 @@ public class BlogController {
     private static final String INPUT = "admin/blogs-input";
     private static final String LIST = "admin/blogs";
     private static final String REDIRECT_LIST = "redirect:/admin/blogs";
+
+    @GetMapping("qiniu")
+    public String qiniu() {
+        return "admin/qiniu";
+    }
 
     @GetMapping("uploadfiles")
     public String uploadfiles() {
@@ -138,4 +144,12 @@ public class BlogController {
         blogService.operateBlog(ids, false);
         return new Result(true, "操作成功");
     }
+
+    @PutMapping("qiniu")
+    @ResponseBody
+    public Result updateQiniu(@RequestBody Map<String,String> map) {
+        blogService.updateQiniu(map);
+        return new Result(true, "操作成功");
+    }
+
 }

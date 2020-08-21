@@ -11,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.*;
 import java.util.*;
@@ -71,7 +72,7 @@ public class BlogService {
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
                 if (!"".equals(blog.getTitle()) && blog.getTitle() != null) {
-                    predicates.add(cb.like(root.<String>get("title"), "%" + blog.getTitle() + "%"));
+                    predicates.add(cb.like(root.get("title"), "%" + blog.getTitle() + "%"));
                 }
                 if (blog.getTypeId() != null) {
                     predicates.add(cb.equal(root.<Type>get("type").get("id"), blog.getTypeId()));
@@ -167,5 +168,16 @@ public class BlogService {
             blog.setPublished(bool);
             blog.setUpdateTime(new Date());
         }
+    }
+
+    public void updateQiniu(Map<String, String> map) {
+        String beforeUrl = map.get("beforeUrl");
+        String afterUrl = map.get("afterUrl");
+        List<Blog> blogs = blogDao.findAll();
+        if (!CollectionUtils.isEmpty(blogs)) {
+            blogs.forEach(blog -> blog.setContent(blog.getContent().contains(beforeUrl)
+                    ? blog.getContent().replace(beforeUrl, afterUrl) : blog.getContent()));
+        }
+
     }
 }

@@ -20,6 +20,7 @@
             <a href="#" th:href="@{/admin/types}" class=" m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class=" idea icon"></i>分类</a>
             <a href="#" th:href="@{/admin/tags}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class=" tags icon"></i>标签</a>
             <a href="#" th:href="@{/admin/uploadfiles}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class=" angle double up icon"></i>文件上传</a>
+            <a href="#" th:href="@{/admin/qiniu}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class=" history icon"></i>更新七牛云</a>
             <div class="right m-item m-mobile-hide menu">
                 <div class="ui dropdown  item">
                     <div class="text">
@@ -89,6 +90,18 @@
         $("body").css("background-image", "url('https://www.toptal.com/designers/subtlepatterns/patterns/" + bgUrls[Math.floor(Math.random() * bgUrls.length)] + "')");
     </script>
     <script>
+        function form2JsonString(formId) {
+            var paramArray = $('#' + formId).serializeArray();
+            var jsonObj = {};
+            $(paramArray).each(function () {
+                jsonObj[this.name] = this.value;
+                if (this.name === "tagIds") {
+                    jsonObj[this.name] = ($("#tagIds").val()).split(",");
+                }
+            });
+            return JSON.stringify(jsonObj);
+        }
+
         $('.menu.toggle').click(function () {
             $('.m-item').toggleClass('m-mobile-hide');
         });

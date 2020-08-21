@@ -192,7 +192,7 @@
                             <i class="qq icon"></i>
                             <input autocomplete="off" maxlength="12" oninput="value=value.replace(/[^\d]/g,'')"
                                    type="text" name="qq" placeholder="qq号"
-                                   th:value="${session.user} == null ? '1137042957' : ''">
+                                   th:value="${session.user} != null ? '1137042957' : ''">
                         </div>
                     </div>
                     <div class="field  m-margin-bottom-small m-mobile-wide">

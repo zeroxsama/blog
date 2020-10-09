@@ -10,4 +10,4 @@ spring:
       max-request-size: 30MB
       max-file-size: 20MB
 
-qiniu_url: http://qffb362rt.hn-bkt.clouddn.com/
+qiniu_url: ${myenv:http://qhx6myqd8.hn-bkt.clouddn.com/}
